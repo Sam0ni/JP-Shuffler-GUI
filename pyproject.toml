@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "shufflergui"
+version = "0.1.0"
+description = ""
+authors = ["Samppa Salo <samppasalo16@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.32.3"
+pillow = "^10.4.0"
+tksvg = "^0.7.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

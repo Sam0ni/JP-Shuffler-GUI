@@ -1,0 +1,149 @@
+heijastaa(reflect/project)
+kuva/kanji vedot
+kopioida/valokuva
+tosi(true)/vain(just)
+ääni
+mieluinen/musiikki
+materiaalit/maksu(fee)
+järjestää(organize)/kokoontua(assemble)
+ajatella
+väri
+valkoinen
+musta
+punainen
+
+nousta/tapahtua
+nukkua
+leikkiä/huvittaa
+seisoa/pystyttää(establish)
+istumapaikka/istua
+käyttää
+alkaa(begin)/aloitus(start)
+loppu(end)/lopettaa(finish)
+lainata jollekin/vuokrata
+lainata joltakin/vuokrata
+palauttaa
+lähettää
+
+yhdistää/päättää(conclude)
+naida(marry)
+erota(separate)
+istuin(seat)
+vika(defect)/puuttua(lack)
+edellinen
+korjata/sovitella(settle)
+valtameri/Läntinen
+seremonia/muoto(form)
+rauha/summa/japanilainen
+eloisa(vivid)/elinvoima(vigor)
+
+kevät
+kesä
+syksy
+talvi
+kuuma(sää)
+kuuma(esineet)/lämpö(heat)
+kylmä(sää)
+kylmä(esineet)/viileä
+lämmin(sää)
+lämmin(esineet)
+viileä
+sää
+
+palvella/tehdä(do)
+asia(thing)/asia(matter)
+henkilö
+kantaa/omaisuus
+kääntyä(turn)
+valita(choose)/valita(elect)
+kirjoittaa ylös
+keskustella
+jäsen
+kaupankäynti(commerce)/vaihtokauppa(trade)
+työ/bisnes
+viljely/maatalous
+
+hyvä
+paha
+piste/pistetilanne
+oikea(right/correct)
+erota(differ)/rikkoa
+sama
+sopiva
+lyödä/oikea
+vaikea
+seuraava
+muoto(shape/form)
+maku
+
+yrittää
+tutkia(examine)/vaikutus(effect)
+naama/pinta
+yhdistää/koskea
+selittää
+hedelmä/tulos
+sopia(fit/suit)
+status/rank
+vastaanottaa
+pudota(fall/drop)
+pysyä
+ajatukset
+
+sormi/osoittaa
+taittaa/rikkoa
+maksaa
+heittää
+iskeä/lyödä
+syvä
+pestä
+virta/virtaus
+sammuttaa/poistaa
+päättää
+
+matka, matkustus
+lupaus, suunnilleen
+idea, ajatus, odotukset
+taso, semi-
+elättää
+kasvotusten, ministeri
+puhua
+pari, linkki
+sotku
+majoittua, jäädä
+erityinen
+nopeasti, kiire
+
+linja
+lähtö, julkaista
+lähestyä, saavuttaa
+yhdistää/vaihtaa keskenään, sekoittaa
+kone, mahdollisuus
+este, yhteys, portti, liittyen
+osasto, toimisto
+luottamus, usko, viesti
+tie, reitti
+syy, tilanne, menehtynyt, myöhäinen, edellinen
+kaataa, keskittyä
+tarkoitus, merkitys
+
+painaa, työntää
+vetää, kiristää (tiukaksi)
+jakaa, leikata
+jatkaa, operoida
+itse
+kurssi, linja
+ottaa
+pyytää, käskeä
+rukoilla, anoa
+tietää, tiedostaa, älykkyys
+
+jalusta, pöytä, alusta, lukunumero koneille
+ikkuna
+väline, huonekalu, työkalu
+astia, työkalu, elin
+käyttää, tehtävä
+vaatteet, puku, noudattaa
+paperi
+termi, ilmaus, erota
+sekalainen, karkea, epätarkka
+tallentaa, lehti

@@ -1,0 +1,10 @@
+def get_svg_file(arg):
+	id = canonicalId(arg)
+	kanji = [(f.path, f.read()) for f in listSvgFiles("./kanji/") if f.id == id]
+	print("Found %d files matching ID %s" % (len(kanji), id))
+	file_paths = []
+	for i, (path, c) in enumerate(kanji):
+		file_paths.append(path)
+		print("\nFile %s (%d/%d):" % (path, i+1, len(kanji)))
+		writeOutput(characterSummary(c) + "\n", sys.stdout)
+	return file_paths
