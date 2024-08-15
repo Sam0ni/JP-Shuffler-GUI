@@ -3,11 +3,12 @@ import kanjishuffle
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'kanjivg'))
-import kvg_lookup
-from PIL import Image, ImageTk
+#import kvg_lookup
+from PIL import Image, ImageTk, ImageSequence
 from io import BytesIO
-import tksvg
+#import tksvg
 import requests
+import requests_cache
 sys.stdout.reconfigure(encoding='utf-8')
 
 
@@ -15,6 +16,7 @@ class App:
     def __init__(self, window):
         self.window = window
         self.current_view = None
+        requests_cache.install_cache("kanjicache", expire_after=7200, backend="memory")
 
     def start(self):
         self.current_view = ShufflerMenu(self.window, 600, 1200, 3, self.handle_file_menu, True)
@@ -191,11 +193,13 @@ class KanjiView:
         self.window = window
         self.files = chosen_files
         self.current = 0
-        self.widgets = []
         self.frames = []
         self.current_kanji = tk.Label(text=chosen_files[0][0],font=("Arial", 25))
         self.current_kun = tk.Label(text=f"Kun: {chosen_files[3][0]}",font=("Arial", 25))
         self.current_on = tk.Label(text=f"On: {chosen_files[2][0]}",font=("Arial", 25))
+        self.gif_label = tk.Label()
+        self.widgets = [self.current_kanji, self.current_kun, self.current_on, self.gif_label]
+        self.anim_is_running = None
         self.window.bind("<Up>", self.handle_kanji_view)
         self.window.bind("<Down>", self.handle_yomi_view)
         self.window.bind("<Right>", self.handle_next)
@@ -212,25 +216,39 @@ class KanjiView:
 
         
     def handle_kanji_view(self, event):
-        gif_image = Comms.request_kanji(self.files[1][self.current])
-        images = Image.open(f"./kanji.gif/kanji/gif/150x150/{self.files[1][self.current]}.gif")
-        frames = images.n_frames
-
-        photoimage_objects = []
-        for i in range(frames):
-            obj = tk.PhotoImage(file = f"./kanji.gif/kanji/{self.files[1][self.current]}.gif", format = f"gif -index {i}")
-            photoimage_objects.append(obj)
-        self.svg_image = tksvg.SvgImage(file=photoimage_objects[2], scale=2)
-        label = tk.Label(image=self.svg_image)
-        label.grid(row=1, column=1)
+        gif_bytes = Comms.request_kanji(self.files[1][self.current])
+        gif_image = Image.open(gif_bytes)
+        #images = Image.open(f"./kanji.gif/kanji/gif/150x150/{self.files[1][self.current]}.gif")
+        self.frames = [ImageTk.PhotoImage(frame) for frame in ImageSequence.Iterator(gif_image)]
+        self.frame_count = len(self.frames)
+        self.gif_label.grid(row=1, column=1)
+        #self.svg_image = tksvg.SvgImage(file=photoimage_objects[2], scale=2)
         self.current_kanji.config(text=self.files[1][self.current],font=("Arial", 25))
         self.current_kun.grid(row=0, column=0, sticky="s")
         self.current_on.grid(row=0, column=2, sticky="s")
+        self.start_animation()
+
+    def animate_gif(self, indx):
+        frame = self.frames[indx]
+        indx = (indx + 1) % self.frame_count
+        self.gif_label.configure(image=frame)
+        self.anim_is_running = self.window.after(50, self.animate_gif, indx)
+
+    def start_animation(self):
+        if not self.anim_is_running:
+            self.animate_gif(0)
+
+    def stop_animation(self):
+        if self.anim_is_running:
+            self.gif_label.grid_forget()
+            self.window.after_cancel(self.anim_is_running)
+            self.anim_is_running = None
 
     def handle_yomi_view(self, event):
         self.current_kanji.config(text=self.files[0][self.current])
         self.current_kun.grid_forget()
         self.current_on.grid_forget()
+        self.stop_animation()
 
     def handle_next(self, event):
         if self.current == len(self.files[0]) - 1:
@@ -278,9 +296,7 @@ class Comms:
     def request_kanji(kanji):
         req = requests.get(f"https://raw.githubusercontent.com/Sam0ni/kanji.gif/master/kanji/gif/150x150/{kanji}.gif")
         gif_bytes = BytesIO(req.content)
-
-        gif_image = Image.open(gif_bytes)
-        return gif_image
+        return gif_bytes
 
 if __name__ == "__main__":
     window = tk.Tk()
