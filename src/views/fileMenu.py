@@ -1,11 +1,11 @@
-from menu import Menu
-from kanjishuffle import kanjishuffle
+from views.menu import Menu
+import kanjishuffle
 
 
 class FileMenu(Menu):
-    def __init__(self, window, height, width, botans, handler, horizontally, commands=None, files=None, button_text = None):
+    def __init__(self, window, height, width, botans, handler, horizontally, commands=None, files=None):
         self.files = files
-        super.__init__(window, height, width, botans, handler, horizontally, commands, button_text)
+        super().__init__(window, height, width, botans, handler, horizontally, commands, files)
         self.init_commands()
 
     def init_commands(self):

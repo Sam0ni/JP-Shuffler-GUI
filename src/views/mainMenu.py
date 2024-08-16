@@ -1,9 +1,9 @@
-from menu import Menu
-from kanjishuffle import kanjishuffle
+from views.menu import Menu
+import kanjishuffle
 
 class MainMenu(Menu):
-    def __init__(self, window, height, width, botans, handler, horizontally, commands=None, button_text = None):
-        super.__init__(window, height, width, botans, handler, horizontally, commands, button_text)
+    def __init__(self, window, height, width, botans, handler, horizontally, commands=None):
+        super().__init__(window, height, width, botans, handler, horizontally, commands, ["Kanjishuffle", "Under Construction", "Under Construction"])
 
     def init_commands(self):
         comms = {0: self.kanji_command, 1: lambda: print("punajuur"), 2: lambda: print("kurpitsasalaatti")}

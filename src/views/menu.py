@@ -1,7 +1,5 @@
 import tkinter as tk
 
-
-
 class Menu:
     def __init__(self, window, height, width, botans, handler, horizontally, commands=None, button_text=None):
         self.widgets = []
