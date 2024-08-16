@@ -118,7 +118,7 @@ def get_all_lists(files, path):
                     
 
 def file_strip_and_list(filu):
-    with open(filu, "r", encoding="utf-8") as file:
+    with open(f"src/{filu}", "r", encoding="utf-8") as file:
         return [line.replace("\n", "") for line in file if line != "\n"]
 
 
@@ -142,7 +142,7 @@ def filu_service(faili):
 def get_files(type, condition=None):
     polkujatallataan = os.path.join(os.path.dirname(__file__), type)
 
-    files = [f for f in os.listdir(polkujatallataan) if os.path.isfile(os.path.join(type, f))]
+    files = [f for f in os.listdir(polkujatallataan) if os.path.isfile(os.path.join(polkujatallataan, f))]
     if condition:
         files = [f for f in files if not condition(f)]
     return files

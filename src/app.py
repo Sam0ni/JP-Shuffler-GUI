@@ -108,6 +108,7 @@ class ChopMenu:
         self.window = window
         self.files = files
         self.chosen_file = chosen_file
+        self.holding = None
         self.widgets = []
         self.frames = []
         self.handler = handler
@@ -152,7 +153,13 @@ class ChopMenu:
         self.widgets.append(submitBotan)
         self.frames.append(submitFrame)
 
-    def handle_where_change(self, by):
+    def handle_where_change(self, neg):
+        wait_values = {10: 100, 100: 50}
+        by = 1
+        wait = next((wait for limit, wait in wait_values.items() if self.how_long < limit), 20)
+        if neg:
+            by *= -1
+        
         if (by < 0 and self.where > 1) or (by > 0 and self.where < self.to):
             self.where += by
         elif (by > 0 and self.to == self.where):
@@ -160,8 +167,14 @@ class ChopMenu:
         elif (by < 0 and self.where == 1):
             self.where = 0 + self.to
         self.where_label["text"] = f"Mistä: {self.where}"
+        self.holding = self.window.after(wait, self.handle_where_change, neg)
 
-    def handle_to_change(self, by):
+    def handle_to_change(self, neg):
+        wait_values = {10: 100, 100: 50}
+        by = 1
+        wait = next((wait for limit, wait in wait_values.items() if self.how_long < limit), 20)
+        if neg:
+            by *= -1
         if (by < 0 and self.to > self.where) or (by > 0 and self.to < len(self.chosen_file[0])):
             self.to += by
         elif (by < 0 and self.to == self.where):
@@ -169,6 +182,18 @@ class ChopMenu:
         elif (by > 0 and self.to == len(self.chosen_file[0])):
             self.to = 0 + self.where
         self.to_label["text"] = f"Mihin: {self.to}"
+        self.holding = self.window.after(wait, self.handle_where_change, neg)
+
+    def hold_button(self, handle, neg):
+        if not self.holding:
+            self.how_long = 0
+            handle(neg)
+        
+    def stop_holding(self):
+        if self.holding:
+            self.how_long = 0
+            self.window.after_cancel(self.holding)
+            self.holding = None
 
     def handle_submit(self):
         choppedFiles = kanjishuffle.chop_and_shuffle_lists(self.chosen_file, self.where, self.to)
