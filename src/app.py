@@ -6,7 +6,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'kanjivg'))
 #import kvg_lookup
 from PIL import Image, ImageTk, ImageSequence
 from io import BytesIO
-#import tksvg
 import requests
 import requests_cache
 sys.stdout.reconfigure(encoding='utf-8')
@@ -38,8 +37,7 @@ class App:
     def handle_kanji_view(self, chopped_files):
         self.current_view.destroy()
         self.current_view = KanjiView(self.window, chopped_files)
-        self.current_view.initiate_view()
-
+        self.current_view.initiate_view()    
 
 class ShufflerMenu:
     def __init__(self, window, height, width, botans, handler, horizontally, commands=None, files=None):
@@ -193,18 +191,30 @@ class KanjiView:
         self.window = window
         self.files = chosen_files
         self.current = 0
-        self.frames = []
-        self.current_kanji = tk.Label(text=chosen_files[0][0],font=("Arial", 25))
-        self.current_kun = tk.Label(text=f"Kun: {chosen_files[3][0]}",font=("Arial", 25))
-        self.current_on = tk.Label(text=f"On: {chosen_files[2][0]}",font=("Arial", 25))
-        self.gif_label = tk.Label()
-        self.widgets = [self.current_kanji, self.current_kun, self.current_on, self.gif_label]
+        self.frames, self.widgets = self.set_up_frames_and_labels()
         self.anim_is_running = None
+        self.bind_keys()
+
+    def set_up_frames_and_labels(self):
+        cur_kanji_frame = tk.Frame(borderwidth=2, background="black")
+        cur_kun_frame = tk.Frame(borderwidth=2, background="black")
+        cur_on_frame = tk.Frame(borderwidth=2, background="black")
+        cur_gif_frame = tk.Frame(borderwidth=2, background="black")
+        cur_kanji_frame.grid(row=0, column=1)
+        cur_kun_frame.grid(row=0, column=0)
+        cur_on_frame.grid(row=0, column=2)
+        cur_gif_frame.grid(row=1, column=1)
+        self.current_kanji = tk.Label(text=self.files[0][0],font=("Arial", 25), master=cur_kanji_frame)
+        self.current_kun = tk.Label(text=f"Kun: {self.files[3][0]}",font=("Arial", 25), master=cur_kun_frame)
+        self.current_on = tk.Label(text=f"On: {self.files[2][0]}",font=("Arial", 25), master=cur_on_frame)
+        self.gif_label = tk.Label(master=cur_gif_frame)
+        return [cur_kanji_frame, cur_gif_frame, cur_kun_frame, cur_on_frame], [self.current_kanji, self.current_kun, self.current_on, self.gif_label]
+    
+    def bind_keys(self):
         self.window.bind("<Up>", self.handle_kanji_view)
         self.window.bind("<Down>", self.handle_yomi_view)
         self.window.bind("<Right>", self.handle_next)
         self.window.bind("<Left>", self.handle_previous)
-    
 
     def initiate_view(self):
         self.window.rowconfigure(0, weight=1, minsize=600)
@@ -212,21 +222,22 @@ class KanjiView:
         self.window.columnconfigure(0, weight=1, minsize=400)
         self.window.columnconfigure(1, weight=1, minsize=400)
         self.window.columnconfigure(2, weight=1, minsize=400)
-        self.current_kanji.grid(row=0, column=1)
+        self.current_kanji.pack()
 
         
     def handle_kanji_view(self, event):
+        self.load_gif()
+        self.gif_label.pack()
+        self.current_kanji.config(text=self.files[1][self.current],font=("Arial", 25))
+        self.current_kun.pack()
+        self.current_on.pack()
+        self.start_animation()
+
+    def load_gif(self):
         gif_bytes = Comms.request_kanji(self.files[1][self.current])
         gif_image = Image.open(gif_bytes)
-        #images = Image.open(f"./kanji.gif/kanji/gif/150x150/{self.files[1][self.current]}.gif")
         self.frames = [ImageTk.PhotoImage(frame) for frame in ImageSequence.Iterator(gif_image)]
         self.frame_count = len(self.frames)
-        self.gif_label.grid(row=1, column=1)
-        #self.svg_image = tksvg.SvgImage(file=photoimage_objects[2], scale=2)
-        self.current_kanji.config(text=self.files[1][self.current],font=("Arial", 25))
-        self.current_kun.grid(row=0, column=0, sticky="s")
-        self.current_on.grid(row=0, column=2, sticky="s")
-        self.start_animation()
 
     def animate_gif(self, indx):
         frame = self.frames[indx]
@@ -287,11 +298,6 @@ class Comms:
     def __init__(self, url):
         self.url = url
 
-    @staticmethod
-    def get_kanji_strokes(kanji):
-        files = kvg_lookup.get_svg_file(kanji)
-        return files[0]
-    
     @staticmethod
     def request_kanji(kanji):
         req = requests.get(f"https://raw.githubusercontent.com/Sam0ni/kanji.gif/master/kanji/gif/150x150/{kanji}.gif")
