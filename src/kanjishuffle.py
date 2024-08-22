@@ -83,9 +83,11 @@ def katko_lista(lista1, lista2=None):
         return klista1, klista2
     return klista1
 
-def chop_and_shuffle_lists(files, where, to):
+def chop_and_shuffle_lists(files, where, to, shuffle=True):
     chopped_files = [katko_apu(l, where, to) for l in files]
-    return shuffle_kanji_parts(chopped_files[0], chopped_files[1], chopped_files[2], chopped_files[3])
+    if shuffle:
+        return shuffle_kanji_parts(chopped_files[0], chopped_files[1], chopped_files[2], chopped_files[3])
+    return chopped_files[0], chopped_files[1], chopped_files[2], chopped_files[3]
     
 
 def katko_apu(lista, mistä, mihin):

@@ -12,6 +12,7 @@ class ChopMenu:
         self.handler = handler
         self.where = 1
         self.to = len(chosen_file[0])
+        self.shuffle = True
         self.commands = {0: ((lambda event: self.hold_button(self.handle_where_change, False)), (lambda event: self.hold_button(self.handle_where_change, True))), 2: ((lambda event: self.hold_button(self.handle_to_change, False)), (lambda event: self.hold_button(self.handle_to_change, True))), 1: lambda: self.handle_submit()}
 
     def divide_screen(self, gauge, by, function):
@@ -32,8 +33,8 @@ class ChopMenu:
         for i in (0, 2):
             freimi = tk.Frame(relief=tk.SUNKEN, borderwidth=10)
             freimi2 = tk.Frame(relief=tk.SUNKEN, borderwidth=10)
-            botan = tk.Button(text="hellou tere", width=50, height=10, bg="blue", fg="red", master=freimi)
-            botan2 = tk.Button(text="hellou tere", width=50, height=10, bg="blue", fg="red", master=freimi2)
+            botan = tk.Button(text="Up", width=50, height=10, bg="blue", fg="red", master=freimi)
+            botan2 = tk.Button(text="Down", width=50, height=10, bg="blue", fg="red", master=freimi2)
             botan.bind('<ButtonPress-1>', self.commands[i][0])
             botan.bind('<ButtonRelease-1>', lambda event: self.stop_holding())
             botan2.bind('<ButtonPress-1>', self.commands[i][1])
@@ -48,8 +49,20 @@ class ChopMenu:
         submitFrame.grid(row=1, column=1, pady=10)
         submitBotan = tk.Button(text="submit", width=50, height=10, bg="red", fg="white", master=submitFrame, command=self.commands[1])
         submitBotan.pack()
-        self.widgets.append(submitBotan)
-        self.frames.append(submitFrame)
+        shuffleFrame = tk.Frame(relief=tk.GROOVE, borderwidth=10)
+        shuffleFrame.grid(row=2, column=1, pady=10)
+        self.shuffleBotan = tk.Button(text="Shuffle? Yes!", width=25, height=5, bg="purple", fg="white", master=shuffleFrame, command=self.shuffleButtonCommand)
+        self.shuffleBotan.pack()
+        self.widgets.extend([submitBotan, self.shuffleBotan])
+        self.frames.extend([submitFrame, shuffleFrame])
+
+    def shuffleButtonCommand(self):
+        self.shuffle = not self.shuffle
+        if self.shuffle:
+            self.shuffleBotan.configure(text="Shuffle? Yes!")
+        else:
+            self.shuffleBotan.configure(text="Shuffle? No!")
+
     
     def create_where_and_to_texts(self):
         self.where_label = tk.Label(text=f"Mistä: {self.where}", font=("Arial", 25))
@@ -103,7 +116,7 @@ class ChopMenu:
             self.holding = None
 
     def handle_submit(self):
-        choppedFiles = kanjishuffle.chop_and_shuffle_lists(self.chosen_file, self.where, self.to)
+        choppedFiles = kanjishuffle.chop_and_shuffle_lists(self.chosen_file, self.where, self.to, self.shuffle)
         self.handler(choppedFiles)
 
     def destroy(self):
