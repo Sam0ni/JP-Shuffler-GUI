@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import ttk as tk
 import kanjishuffle
 
 class ChopMenu:
@@ -31,10 +31,10 @@ class ChopMenu:
 
     def create_buttons(self):
         for i in (0, 2):
-            freimi = tk.Frame(relief=tk.SUNKEN, borderwidth=10)
-            freimi2 = tk.Frame(relief=tk.SUNKEN, borderwidth=10)
-            botan = tk.Button(text="Up", width=50, height=10, bg="blue", fg="red", master=freimi)
-            botan2 = tk.Button(text="Down", width=50, height=10, bg="blue", fg="red", master=freimi2)
+            freimi = tk.Frame(borderwidth=10)
+            freimi2 = tk.Frame(borderwidth=10)
+            botan = tk.Button(text="Up", width=25, master=freimi, style='Accent.TButton')
+            botan2 = tk.Button(text="Down", width=25, master=freimi2, style='Accent.TButton')
             botan.bind('<ButtonPress-1>', self.commands[i][0])
             botan.bind('<ButtonRelease-1>', lambda event: self.stop_holding())
             botan2.bind('<ButtonPress-1>', self.commands[i][1])
@@ -45,23 +45,23 @@ class ChopMenu:
             botan2.grid(row=2, column=i, sticky="n")
             self.widgets.extend([botan, botan2])
             self.frames.extend([freimi, freimi2])
-        submitFrame = tk.Frame(relief=tk.GROOVE, borderwidth=10)
+        submitFrame = tk.Frame(borderwidth=10)
         submitFrame.grid(row=1, column=1, pady=10)
-        submitBotan = tk.Button(text="submit", width=50, height=10, bg="red", fg="white", master=submitFrame, command=self.commands[1])
+        submitBotan = tk.Button(text="submit", width=50, master=submitFrame, command=self.commands[1], style="Accent.TButton")
         submitBotan.pack()
-        shuffleFrame = tk.Frame(relief=tk.GROOVE, borderwidth=10)
+        shuffleFrame = tk.Frame(self.window)
         shuffleFrame.grid(row=2, column=1, pady=10)
-        self.shuffleBotan = tk.Button(text="Shuffle? Yes!", width=25, height=5, bg="purple", fg="white", master=shuffleFrame, command=self.shuffleButtonCommand)
-        self.shuffleBotan.pack()
-        self.widgets.extend([submitBotan, self.shuffleBotan])
+        self.shuffleSwitch = tk.Checkbutton(master=shuffleFrame, text='Shuffle? Yes!', style='Switch', command=self.shuffleButtonCommand)
+        self.shuffleSwitch.pack()
+        self.widgets.extend([submitBotan, self.shuffleSwitch])
         self.frames.extend([submitFrame, shuffleFrame])
 
     def shuffleButtonCommand(self):
         self.shuffle = not self.shuffle
         if self.shuffle:
-            self.shuffleBotan.configure(text="Shuffle? Yes!")
+            self.shuffleSwitch.configure(text="Shuffle? Yes!")
         else:
-            self.shuffleBotan.configure(text="Shuffle? No!")
+            self.shuffleSwitch.configure(text="Shuffle? No!")
 
     
     def create_where_and_to_texts(self):

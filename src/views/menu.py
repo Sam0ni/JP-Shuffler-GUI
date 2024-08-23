@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import ttk as tk
 
 class Menu:
     def __init__(self, window, height, width, botans, handler, horizontally, commands=None, button_text=None):
@@ -22,8 +22,8 @@ class Menu:
     
     def create_buttons(self, number_of_buttons):
         for i in range(number_of_buttons):
-            freimi = tk.Frame(relief=tk.SUNKEN, borderwidth=10)
-            botan = tk.Button(text=self.button_text[i], width=50, height=10, bg="blue", fg="red", master=freimi, command=self.commands[i])
+            freimi = tk.Frame(borderwidth=10, style="Card")
+            botan = tk.Button(text=self.button_text[i], width=25, master=freimi, command=self.commands[i], style='Accent.TButton')
             if self.horizontally:
                 freimi.grid(row=0, column=i, padx=10)
             else:

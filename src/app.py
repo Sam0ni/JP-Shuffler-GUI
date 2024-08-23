@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from views.fileMenu import FileMenu
 from views.mainMenu import MainMenu
 from views.chopMenu import ChopMenu
@@ -13,6 +14,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 class App:
     def __init__(self, window):
         self.window = window
+        self.window.tk.call("source", "Forest-ttk-theme/forest-dark.tcl")
+        ttk.Style().theme_use("forest-dark")
         self.window.geometry("1400x700")
         self.current_view = None
         requests_cache.install_cache("kanjicache", expire_after=7200, backend="memory")
